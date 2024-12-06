@@ -1,0 +1,16 @@
+services:
+  web:
+    build: .
+    container_name: dcmsend-container
+    ports:
+      - "5050:5050"
+    volumes:
+      - .:/app
+      - ./instance:/app/instance
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=production
+    restart: unless-stopped
+    command: >
+      sh -c "python -c 'from app import app, init_db; app.app_context().push(); init_db()' &&
+             python app.py"
